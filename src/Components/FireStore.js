@@ -10,12 +10,49 @@ admin.initializeApp({//Initialize the app
 
 
 const db = admin.firestore();//Initialize the database
-console.log(db);
+//console.log(db);
 
 //console.log("App started");
 
+
+
+
+
+documentData = db.collection('ingredients')
+const ingredients = [];
+//get all documents
+documentData.get()
+    .then(snapshot => {
+        snapshot.forEach(doc => {
+            ingredients.push(doc.data());
+            //console.log(doc.id, '=>', doc.data());
+        });
+    })
+    .catch(err => {
+        console.log('Error getting documents', err);
+    }
+    );
+
+
+
+
+
+/*
 //add data to the database
 const RefDoc = db.collection('ingredients').doc('1');
+//Get all documents from collection
+RefDoc.get().then(doc => {
+    if (!doc.exists) {
+        console.log('No such document!');
+    } else {
+        console.log('Document data:', doc.data());
+    }
+}
+).catch(err => {
+    console.log('Error getting document', err);
+}
+);
+
 //console.log(RefDoc);
 
 //Get field value
@@ -34,3 +71,6 @@ RefDoc.get().then(doc => {
 }
 );
 //Add data to the database
+
+
+*/
