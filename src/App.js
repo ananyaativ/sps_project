@@ -62,6 +62,7 @@ const App = () => {
             )}
             <br/>
             //To DO: Add the event to change to different page and pass the list of checked ingredients
+            
             <button>Search</button>
 
         </div>
