@@ -17,21 +17,55 @@ const db = admin.firestore();//Initialize the database
 
 
 
-
+/*
 documentData = db.collection('ingredients')
 const ingredients = [];
 //get all documents
 documentData.get()
     .then(snapshot => {
         snapshot.forEach(doc => {
+            //ingredients.push(doc.data());
+            //console.log(doc.data()['name']);
+            //console.log(typeof(doc.data()));
+            ///Map the data to an array
             ingredients.push(doc.data());
-            //console.log(doc.id, '=>', doc.data());
+
         });
     })
     .catch(err => {
         console.log('Error getting documents', err);
     }
     );
+
+//using useState to store the ingredients
+const [ingredientsList, setIngredientsList] = useState(ingredients);
+//console.log(ingredientsList);
+
+
+*/
+/*
+ingredientsList = [
+documentData = db.collection('ingredients').get().then(doc => {
+    doc.forEach(doc => {
+        //console.log(doc.data());
+        ingredientsList.push(doc.data());
+    }
+    )
+}
+).catch(err => {
+    console.log('Error getting documents', err);
+}
+)
+]
+
+    
+console.log(ingredientsList);
+*/
+
+
+
+
+
 
 
 
