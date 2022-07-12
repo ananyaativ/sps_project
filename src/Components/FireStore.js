@@ -10,9 +10,11 @@ admin.initializeApp({//Initialize the app
 
 
 const db = admin.firestore();//Initialize the database
-//console.log(db);
 
-//console.log("App started");
+
+
+
+
 
 
 

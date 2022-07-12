@@ -1,8 +1,8 @@
 
 import {React , useState , useEffect} from 'react';
-import data from './data.json';
+//import data from './data.json';
 import axios from 'axios';
-import db from './firestore';
+import db from './FireStore';
 
 
 
@@ -17,41 +17,58 @@ admin.initializeApp({//Initialize the app
 });
 
 
-const db = admin.firestore();//Initialize the database
+const dbase = admin.firestore();//Initialize the database
 //console.log(db);
 
 //console.log("App started");
 
+//store the firestore data into json
 
 
 
-
-function Search(props)
+function Search(params)
 {
-
-
-    //GET ALL INGREdients from firestore
-    const documentData = db.collection('ingredients')
-    const ingredients = [];
-    //get all documents
-    documentData.get()
-        .then(snapshot => {
-            snapshot.forEach(doc => {
-                //ingredients.push(doc.data());
-                //console.log(doc.data()['name']);
-                //console.log(typeof(doc.data()));
-                ///Map the data to an array
-                ingredients.push(doc.data());
-                
-            });
+    const [ingredientsList, setIngredientsList] = useState([]);
+    const [search, setSearch] = useState('');
+    useEffect( () =>
+    {
+        //Push data into ingredientsList
+        dbase.collection('ingredients').get().then(doc => {
+            doc.forEach(doc => {
+                //console.log(doc.data());
+                ingredientsList.push(doc.data());
+            }
+            )
         }
         ).catch(err => {
             console.log('Error getting documents', err);
         }
-        );
+        )
+
+    }
+    ,[])
+
+    return(
+        <div>
+            <h1>Search</h1>
+            <input type="text" value={search} onChange={(e) => setSearch(e.target.value)}/>
+            <ul>
+                {ingredientsList.map(ingredient => {
+                    if(ingredient.name.toLowerCase().includes(search.toLowerCase()))
+                    {
+                        return(
+                            <li>{ingredient.name}</li>
+                        )
+                    }
+                }
+                )}
+            </ul>
+        </div>
+
+    )
+    
 
 }
-
 
 
 
