@@ -1,0 +1,47 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@500;600&display=swap");
+
+body {
+	background-color: #eaeff1;
+	font-family: "Raleway", sans-serif;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+
+}
+
+button{
+	border: none;
+	padding: 12px 24px;
+	border-radius: 50px;
+  
+	font-weight: 600;
+	color: #0077ff;
+	background-color: #e0efff;
+  
+	/* Button is inline-block element by default, it need to have block display for margin: 0 auto; to work */
+	margin: 0 auto;
+	
+  
+	/* Button is a clickable element, therefore it should have a pointer cursor */
+	cursor: pointer;
+    
+  }
+
+
+    button:hover{
+        background-color: transparent;
+        border: 2px solid #ffff;
+        cursor: pointer;
+    }
+
+    #Ingredients-section{
+        text-align: center;
+    }
+
+    #Instructions-section{
+        text-align: center;
+    }
+    h1{
+        text-align: center;
+    }
+  
