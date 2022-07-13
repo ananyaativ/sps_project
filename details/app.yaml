@@ -1,0 +1,16 @@
+runtime: python37
+
+handlers:
+- url: /
+  static_files: location.html
+  upload: location.html
+
+- url: /location\.html
+  static_files: location.html
+  upload: location.html
+
+- url: /.*
+  secure: always
+  script: auto
+manual_scaling:
+  instances: 1
