@@ -10,9 +10,9 @@
 
     <body>
 
-        <div class = "recipe-details">
-            <h1>Sushi</h1>
-        </div>
+     
+           <h1 id = "recipe">banana</h1>
+    
 
        <section id = "Ingredients-section">
             <h2>Ingredients</h2>
@@ -29,5 +29,12 @@
        </section>
 
        <button type="button" onclick="window.location.href='location.html'">Nearby Restaurants  </button>
+       <script>
+        //store the value of the recipe name in the local storage to be used as a keyword
+        let recipe = document.getElementById('recipe').innerHTML;
+        localStorage.setItem('textValue',recipe);
+        window.location.href = "location.html";
+        
+       </script>
     </body>
 </html>
