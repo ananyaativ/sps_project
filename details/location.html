@@ -70,9 +70,14 @@ a {
 
   <!-- Map appears here -->
   <div id="map"></div>
+  <p id = "keyword"></p>
+ 
+<script>
+    //retrive data from local storage
+    document.getElementById('keyword').textContent = localStorage.getItem('textValue');
+</script>
+<script>
 
-
-  <script>
 let pos;
 let map;
 let bounds;
@@ -80,6 +85,9 @@ let infoWindow;
 let currentInfoWindow;
 let service;
 let infoPane;
+let recipe = "Beef";
+recipe = document.getElementById('keyword').innerHTML;
+
 function initMap() {
     // Initialize variables
     bounds = new google.maps.LatLngBounds();
@@ -107,7 +115,7 @@ function initMap() {
         map.setCenter(pos);
 
         // Call Places Nearby Search on user's location
-        getNearbyPlaces(pos);
+        getNearbyPlaces(pos,recipe);
     }, () => {
         // Browser supports geolocation, but user has denied permission
         handleLocationError(true, infoWindow);
@@ -136,15 +144,15 @@ function handleLocationError(browserHasGeolocation, infoWindow) {
     currentInfoWindow = infoWindow;
 
     // Call Places Nearby Search on the default location
-    getNearbyPlaces(pos);
+    getNearbyPlaces(pos,recipe);
 }
 
 // Perform a Places Nearby Search Request
-function getNearbyPlaces(position) {
+function getNearbyPlaces(position,recipe) {
     let request = {
     location: position,
     rankBy: google.maps.places.RankBy.DISTANCE,
-    keyword: 'Sushi'  //TODO: Create a way to get this keyword from the Recipe's name in the details page.
+    keyword: recipe
     };
 
     service = new google.maps.places.PlacesService(map);
@@ -258,9 +266,8 @@ if (placeResult.photos != null) {
     // Open the infoPane
     infoPane.classList.add("open");
 }
-   
 
-</script>
+  </script>
 
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKimWgy_qEeKytX-koGJdEo9eNcUq6ng8&libraries=places&callback=initMap">
 </script>
