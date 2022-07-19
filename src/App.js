@@ -1,10 +1,10 @@
 import './App.css';
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-//import Search from  './Components/Search'
 import firebase from './Components/FireBase';
-//import { QuerySnapshot } from 'firebase-admin/firestore';
-import TextField from "@mui/material/TextField";
+
+
+
 
 
 
@@ -13,7 +13,8 @@ const App = () => {
     const [vegetable, setVegetable] = useState([]);
     const [fruit, setFruit] = useState([]);
     const [checked, setChecked] = useState([]);
-
+    const [recipeList,setrecipeList] = useState([]); //list of recipes
+    
     // Add/Remove checked item from list
     const handleCheck = (event) => {
         let updatedList = [...checked];
@@ -29,6 +30,7 @@ const App = () => {
     const fetchData = () => {
         const vegetableAPI = "http://localhost:8080/filter?type=vegetable";
         const fruitAPI = "http://localhost:8080/filter?type=fruit";
+        const recipeAPI = firebase.firestore().collection('Recipes');//reference to the firestore collection
 
         const getVegetable = axios.get(vegetableAPI);
         const getFruit = axios.get(fruitAPI);
@@ -44,13 +46,71 @@ const App = () => {
             })
         )
 
+
+
+        recipeAPI.get().then((item) =>//get the list of ingredients
+            {
+                item.forEach((doc) => {
+                    setrecipeList(doc.data());
+                }
+                )
+            }
+        )
+
     }
     //checked is the list of ingredients name that are checked
     console.log(checked);
+    
 
-    useEffect(() =>{
+    useEffect(() => {
         fetchData()
     }, [])
+
+   
+
+
+
+/* Mahamud
+     Here is the explanation for the code above:
+    1. First we check if the checked list is null or empty. If it is, we return the following message: "Nothing to show"
+    2. Next we filter the list of ingredients. We use the filter method to filter the list of ingredients.
+    3. We check if the filtered list is not empty and if the length of the filtered list is less than the length of the original list. If it is, we return the following message: "Nothing to show"
+    4. If the above conditions are not met, we return the following message: "Nothing to show"
+    5. We return the following message: "Nothing to show" if the checked list is not in the recipe list 
+*/
+    const fetchRecipe = (checking,recipe) =>
+    {
+       
+        if(checking == null || checking.length == 0)
+        {
+            return ["Nothing to show"];
+        }
+        //console.log(checking.length)
+        
+        const filteredArray = recipe.ingredients.filter(value => checking.includes(value));//filter the list of ingredients
+        if (filteredArray.length != 0 && filteredArray.length <= recipe.ingredients.length)
+        {
+            return (
+                <div>
+                    <h3>{recipe.Food}</h3>
+                    <p>{recipe.ingredients.map(
+                        (value, index) => {
+                            return <li key={index}>{value}</li>//map the list of ingredients
+                        }
+
+                    )}</p>
+                </div>
+            )
+        }
+        else
+        {
+            return <h1>Nothing to show</h1>//if the checked list is not in the recipe list
+        }
+    }
+
+   
+
+    
 
     return (
         <div className="App">
@@ -70,120 +130,26 @@ const App = () => {
             <br/>
             //To DO: Add the event to change to different page and pass the list of checked ingredients
             
-            <button>Search</button>{/*button to search*/}
-            <Search/>{/*Search component*/}
+            <div>
+                
+                    
+                
+             
+            </div>
+            <div>
+                
+                
+               {fetchRecipe(checked,recipeList)}
+               
+            </div>
+
 
         </div>
     );
 }
 
 
-
-
-
-
-
-const List = (props) =>//List component
-{// This component is used to display the list of food that matches the input
-    const [ingredientsList, setIngredientsList] = useState([]);//list of ingredients
-    const [loading, setLoading] = useState(false);//to show loading icon
-  
-    const ref = firebase.firestore().collection('ingredients');//reference to the firestore collection
-
-    const showIngredients = () =>
-    {
-        setLoading(true);//show loading
-        ref.get().then((item) =>//get the list of ingredients
-        {
-            const items = item.docs.map((doc) => doc.data());//get the data of the ingredients
-            setIngredientsList(items);//set the list of ingredients
-        })
-        setLoading(false);//hide loading
-        
-    }
-    useEffect(() =>//when the component is mounted, show the ingredients
-    {
-        showIngredients();//show the list of ingredients
-    }
-    ,[]);
-
-
-
-    const filteredData = ingredientsList.filter((el) => {
-        //if no input the return the original
-        if (props.input === '') {
-            return '';//Return nothing if no input
-        }
-        //return the item which contains the user input
-        else {
-            return el.name.toLowerCase().includes(props.input);
-        }
-    })
-
-    if(ingredientsList.length==0)
-    {
-        return(
-            <h1>
-                Loading...{/*loading if data is not pulling*/}
-            </h1>
-        )
-    }
-    return(
-        <ul>
-            {filteredData.map(ingredient => (/*map the filtered data to the list*/
-                <li key={ingredient.id}>
-                    <h2>{ingredient.name}</h2>{/*display the name of the ingredient*/}
-                    <p>{ingredient.type}</p>{/*type of the ingredient*/}
-                </li>
-            ))}
-
-            </ul>
-            );
-
-   
-
-
-}
-
-
-
-
-
-
-
-
-
-const Search = () => {
-    
-    const [inputText, setInputText] = useState('');//input text
-    let inputHandler = (e) => {//input handler
-      //convert it to a lowercase string
-      setInputText(e.target.value.toLowerCase());//set the input text
-    }//inputHandler
-  
-    
-    return (
-        <div>{/*div to display the search bar*/}
-            <div className='main'>{/*main div*/}
-                <div className='search'>{/*search bar*/}
-            
-                        <TextField
-                    id="outlined-basic"
-                    variant='outlined'
-                    onChange={inputHandler}
-                    fullWidth
-                    label="Search"
-                    />{/*text field for input*/}
-                
-                    <List 
-                    input={inputText}/>{/*Shows a list of food assigned with the character being added*/}
-
-                </div>{/*search div*/}
-            </div>{/*main div*/}
-        </div>//div
-    );
-
-}
+//pass the list of ingredients
 
 
     
