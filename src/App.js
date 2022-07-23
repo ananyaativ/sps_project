@@ -1,10 +1,13 @@
 import './App.css';
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.css';
+import {Button, Card, ToggleButton, ToggleButtonGroup} from 'react-bootstrap';
 
 const App = () => {
     const [vegetable, setVegetable] = useState([]);
     const [fruit, setFruit] = useState([]);
+    const [legumes, setLegumes] = useState([]);
     const [checked, setChecked] = useState([]);
 
     // Add/Remove checked item from list
@@ -19,50 +22,88 @@ const App = () => {
         setChecked(updatedList);
     };
 
+    //gets data from the API and store it in variables
     const fetchData = () => {
         const vegetableAPI = "http://localhost:8080/filter?type=vegetable";
         const fruitAPI = "http://localhost:8080/filter?type=fruit";
+        const legumesAPI = "http://localhost:8080/filter?type=legumes";
+
 
         const getVegetable = axios.get(vegetableAPI);
         const getFruit = axios.get(fruitAPI);
-        axios.all([getVegetable, getFruit]).then(
+        const getLegumes = axios.get(legumesAPI);
+
+        axios.all([getVegetable, getFruit, getLegumes]).then(
             axios.spread((...allData) => {
 
                 const vegetableData = allData[0].data;
                 const fruitData = allData[1].data;
+                const legumesData = allData[2].data;
+
 
                 setVegetable(vegetableData);
                 setFruit(fruitData);
+                setLegumes(legumesData);
 
             })
         )
 
     }
     //checked is the list of ingredients name that are checked
-    console.log(checked);
+    //console.log(checked);
 
-    useEffect(() =>{
+
+    useEffect(() => {
         fetchData()
     }, [])
 
+
+
     return (
         <div className="App">
-            <h2>Vegetables</h2>
-            {vegetable.map((element) => <label>
-                    <input value={element.name} type="checkbox" onChange={handleCheck}/>
-                    {element.name} <br/>
-                </label>
-            )}
-            <h2>Fruits</h2>
-            {fruit.map((element) => <label>
-                    <input value={element.name} type="checkbox" onChange={handleCheck}/>
-                    {element.name} <br/>
-                </label>
+            <div className="background-img">
+                <div className="heading">
+                    Food Finder
+                </div>
+            </div>
+            <Card style={{width: '50rem'}} className="card-center" border="dark">
+                <Card.Header as="h3">Vegetables</Card.Header>
+                <Card.Body>
 
-            )}
-            <br/>
-            //To DO: Add the event to change to different page and pass the list of checked ingredients
-            <button>Search</button>
+                    <ToggleButtonGroup type="checkbox" className="mb-2"  style={{flexWrap: "wrap"}} >
+                        {vegetable.map((element) => <ToggleButton id={element.name} value={element.name} onChange={handleCheck} className="mb-auto custom-button" variant="outline-dark" >
+                                {element.name}
+                            </ToggleButton>
+                        )}
+                    </ToggleButtonGroup>
+                    <br/>
+                </Card.Body>
+            </Card>
+            <Card style={{width: '50rem'}} className="card-center" border="dark">
+                <Card.Header as="h3">Fruits</Card.Header>
+                <Card.Body>
+                    <ToggleButtonGroup type="checkbox" className="mb-2" style={{flexWrap: "wrap"}}>
+                            {fruit.map((element) => <ToggleButton id={element.name} value={element.name} onChange={handleCheck} className="mb-auto custom-button" variant="outline-dark">
+                                    {element.name}
+                                </ToggleButton>
+                            )}
+                    </ToggleButtonGroup>
+                    <br/>
+                </Card.Body>
+            </Card>
+            <Card style={{width: '50rem'}} className="card-center" border="dark">
+                <Card.Header as="h3">Legumes</Card.Header>
+                <Card.Body>
+                    <ToggleButtonGroup type="checkbox" className="mb-2" style={{flexWrap: "wrap"}}>
+                            {legumes.map((element) => <ToggleButton id={element.name} value={element.name} onChange={handleCheck} className="mb-auto custom-button" variant="outline-dark">
+                                    {element.name}
+                                </ToggleButton>
+                            )}
+                    </ToggleButtonGroup>
+                    <br/>
+                </Card.Body>
+            </Card>
+            <Button size="lg" className="search-button">Search</Button>
 
         </div>
     );
