@@ -1,0 +1,8 @@
+./node_modules
+./vscode
+./src/Recipes/.gitignore
+./sps-project/src/main/resources/serviceAccountKey.json
+./sps-project/target/classes/serviceAccountKey.json
+sps-project/.vscode
+.vscode
+node_modules
