@@ -6,3 +6,5 @@
 sps-project/.vscode
 .vscode
 node_modules
+
+sps-project/src/main/resources/
